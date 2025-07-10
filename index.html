@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldenShield Vault - Angela Saxe</title>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --dark-blue: #0F1C3F;
+            --light-blue: #1E3A8A;
+            --white: #FFFFFF;
+            --gray: #F3F4F6;
+            --green: #10B981;
+            --red: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--gray);
+            color: var(--dark-blue);
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--dark-blue);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-img {
+            height: 40px;
+            width: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23D4AF37" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11V11.99z"/></svg>');
+            background-size: contain;
+        }
+
+        /* Main Content Styles */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            background-color: var(--dark-blue);
+            color: white;
+            padding: 2rem 1rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .nav-menu li {
+            margin-bottom: 1rem;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            background-color: var(--gold);
+            border-radius: 4px;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        /* Asset Cards */
+        .asset-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .asset-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .asset-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .asset-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .asset-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-stored {
+            background-color: #DCFCE7;
+            color: var(--green);
+        }
+
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #D97706;
+        }
+
+        .asset-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.9rem;
+            color: #6B7280;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: var(--gold);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gold {
+            background-color: var(--gold);
+            color: var(--dark-blue);
+        }
+
+        .btn-gold:hover {
+            background-color: #C9A227;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--dark-blue);
+            color: var(--dark-blue);
+            margin-left: 10px;
+        }
+
+        /* Asset Details Page */
+        .asset-detail-page {
+            padding: 2rem;
+        }
+
+        .back-button {
+            margin-bottom: 1.5rem;
+        }
+
+        .asset-full-details {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Withdrawal Form */
+        .withdrawal-form {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input, 
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+
+        /* Storage History */
+        .storage-history {
+            margin-top: 2rem;
+        }
+
+        .history-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+            
+            .asset-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dynamic Content Loading -->
+    <div id="app">
+        <!-- Content will be loaded here by JavaScript -->
+    </div>
+
+    <script>
+        // Sample Data - GoldenShield Vault
+        const userData = {
+            name: "Angela Saxe",
+            email: "angela@goldenshield.com",
+            assets: [
+                {
+                    id: 1,
+                    name: "GoldenShield Trunk A",
+                    originalValue: 14200000, // Different original value
+                    currentValue: 19850000,
+                    demurrage: 21900, // $20/day for 3 years
+                    status: "stored",
+                    depositDate: "2020-06-10",
+                    details: "This trunk contains 50 gold bars (24-karat, 400oz each) stored in our Zurich facility. Each bar is individually insured and stored in a tamper-proof container.",
+                    storageHistory: [
+                        {
+                            date: "2020-06-10",
+                            event: "Initial Deposit",
+                            location: "Zurich Vault Z-102",
+                            notes: "Deposited by Angela Saxe with certificate #GS-2020-001"
+                        },
+                        {
+                            date: "2021-03-15",
+                            event: "Annual Inspection",
+                            location: "Zurich Vault Z-102",
+                            notes: "All bars verified and accounted for"
+                        },
+                        {
+                            date: "2022-05-20",
+                            event: "Value Reassessment",
+                            location: "Zurich Vault Z-102",
+                            notes: "Gold price adjustment applied"
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "GoldenShield Trunk B",
+                    originalValue: 11600000, // Different original value
+                    currentValue: 16350000,
+                    demurrage: 18250, // $20/day for 2.5 years
+                    status: "stored",
+                    depositDate: "2021-01-15",
+                    details: "This trunk contains rare gold coins and family heirlooms from the Saxe collection. Includes 12 antique British sovereigns and 8 pre-1933 US gold coins.",
+                    storageHistory: [
+                        {
+                            date: "2021-01-15",
+                            event: "Initial Deposit",
+                            location: "Singapore Vault S-205",
+                            notes: "Deposited by Angela Saxe with certificate #GS-2021-015"
+                        },
+                        {
+                            date: "2022-02-10",
+                            event: "Condition Check",
+                            location: "Singapore Vault S-205",
+                            notes: "All items in excellent condition"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', { 
+                style: 'currency', 
+                currency: 'USD',
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Calculate storage duration
+        function getStorageDuration(depositDate) {
+            const deposit = new Date(depositDate);
+            const now = new Date();
+            const diff = now - deposit;
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
+            return `${years} years, ${months} months`;
+        }
+
+        // Router
+        const routes = {
+            '/': `
+                <div class="login-container" style="max-width: 400px; margin: 5% auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); text-align: center;">
+                    <div class="login-header">
+                        <div class="logo-img"></div>
+                        <h1>GoldenShield Vault</h1>
+                        <p>Secure storage for your precious assets</p>
+                    </div>
+                    
+                    <div class="login-form">
+                        <div class="input-group" style="margin-bottom: 1.5rem; text-align: left;">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="Enter your email" style="width: 100%; padding: 12px; border: 1px solid #E5E7EB; border-radius: 6px; font-size: 1rem;">
+                        </div>
+                        <div class="input-group" style="margin-bottom: 1.5rem; text-align: left;">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter your password" style="width: 100%; padding: 12px; border: 1px solid #E5E7EB; border-radius: 6px; font-size: 1rem;">
+                        </div>
+                        <button id="login-btn" class="btn btn-gold" style="width: 100%;">Login</button>
+                        <div class="login-footer" style="margin-top: 1.5rem; font-size: 0.9rem;">
+                            <p>Authorized access only</p>
+                        </div>
+                    </div>
+                </div>
+            `,
+            '/dashboard': `
+                <header>
+                    <div class="logo">
+                        <div class="logo-img"></div>
+                        <span>GoldenShield Vault</span>
+                    </div>
+                    <div class="auth-buttons">
+                        <button id="logout-btn" class="btn btn-outline">Logout</button>
+                    </div>
+                </header>
+                <div class="container">
+                    <div class="sidebar">
+                        <h3 style="color: var(--gold);">Welcome, ${userData.name}</h3>
+                        <ul class="nav-menu">
+                            <li><a href="#/dashboard" class="active"><span class="nav-icon"></span> Dashboard</a></li>
+                            <li><a href="#" id="logout-link"><span class="nav-icon"></span> Logout</a></li>
+                        </ul>
+                    </div>
+                    <div class="main-content">
+                        <div class="page-header">
+                            <h1>My GoldenShield Assets</h1>
+                        </div>
+                        
+                        ${userData.assets.map(asset => `
+                            <div class="asset-card" onclick="window.location.hash='#/asset/${asset.id}'">
+                                <div class="asset-header">
+                                    <h3 class="asset-title">${asset.name}</h3>
+                                    <span class="asset-status status-${asset.status}">
+                                        ${asset.status.charAt(0).toUpperCase() + asset.status.slice(1)}
+                                    </span>
+                                </div>
+                                
+                                <div class="asset-details">
+                                    <div class="detail">
+                                        <span class="detail-label">Original Value</span>
+                                        <span class="detail-value">${formatCurrency(asset.originalValue)}</span>
+                                    </div>
+                                    <div class="detail">
+                                        <span class="detail-label">Current Value</span>
+                                        <span class="detail-value highlight">${formatCurrency(asset.currentValue)}</span>
+                                    </div>
+                                    <div class="detail">
+                                        <span class="detail-label">Storage Duration</span>
+                                        <span class="detail-value">${getStorageDuration(asset.depositDate)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `,
+            '/asset/1': createAssetDetailPage(1),
+            '/asset/2': createAssetDetailPage(2),
+            '/withdraw/1': createWithdrawalPage(1),
+            '/withdraw/2': createWithdrawalPage(2)
+        };
+
+        // Create asset detail page
+        function createAssetDetailPage(assetId) {
+            const asset = userData.assets.find(a => a.id == assetId);
+            return `
+                <header>
+                    <div class="logo">
+                        <div class="logo-img"></div>
+                        <span>GoldenShield Vault</span>
+                    </div>
+                    <div class="auth-buttons">
+                        <button id="logout-btn" class="btn btn-outline">Logout</button>
+                    </div>
+                </header>
+                <div class="container">
+                    <div class="sidebar">
+                        <h3 style="color: var(--gold);">Welcome, ${userData.name}</h3>
+                        <ul class="nav-menu">
+                            <li><a href="#/dashboard"><span class="nav-icon"></span> Dashboard</a></li>
+                            <li><a href="#" id="logout-link"><span class="nav-icon"></span> Logout</a></li>
+                        </ul>
+                    </div>
+                    <div class="asset-detail-page">
+                        <button class="btn btn-outline back-button" onclick="window.location.hash='#/dashboard'">← Back to Assets</button>
+                        
+                        <div class="asset-full-details">
+                            <div class="asset-header">
+                                <h2>${asset.name}</h2>
+                                <span class="asset-status status-${asset.status}">
+                                    ${asset.status.charAt(0).toUpperCase() + asset.status.slice(1)}
+                                </span>
+                            </div>
+                            
+                            <div class="asset-details" style="margin: 2rem 0;">
+                                <div class="detail">
+                                    <span class="detail-label">Original Value</span>
+                                    <span class="detail-value">${formatCurrency(asset.originalValue)}</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="detail-label">Current Value</span>
+                                    <span class="detail-value highlight">${formatCurrency(asset.currentValue)}</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="detail-label">Demurrage Fees</span>
+                                    <span class="detail-value">${formatCurrency(asset.demurrage)}</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="detail-label">Deposit Date</span>
+                                    <span class="detail-value">${formatDate(asset.depositDate)}</span>
+                                </div>
+                                <div class="detail">
+                                    <span class="detail-label">Storage Duration</span>
+                                    <span class="detail-value">${getStorageDuration(asset.depositDate)}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="detail">
+                                <span class="detail-label">Asset Details</span>
+                                <p>${asset.details}</p>
+                            </div>
+                            
+                            <div class="storage-history">
+                                <h3 style="margin: 2rem 0 1rem;">Storage History</h3>
+                                ${asset.storageHistory.map(event => `
+                                    <div class="history-item">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                            <strong>${formatDate(event.date)}</strong>
+                                            <span>${event.location}</span>
+                                        </div>
+                                        <div>
+                                            <h4 style="margin-bottom: 0.5rem;">${event.event}</h4>
+                                            <p>${event.notes}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <button class="btn btn-gold" style="margin-top: 2rem;" onclick="window.location.hash='#/withdraw/${asset.id}'">
+                                Request Withdrawal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Create withdrawal page
+        function createWithdrawalPage(assetId) {
+            const asset = userData.assets.find(a => a.id == assetId);
+            return `
+                <header>
+                    <div class="logo">
+                        <div class="logo-img"></div>
+                        <span>GoldenShield Vault</span>
+                    </div>
+                    <div class="auth-buttons">
+                        <button id="logout-btn" class="btn btn-outline">Logout</button>
+                    </div>
+                </header>
+                <div class="container">
+                    <div class="sidebar">
+                        <h3 style="color: var(--gold);">Welcome, ${userData.name}</h3>
+                        <ul class="nav-menu">
+                            <li><a href="#/dashboard"><span class="nav-icon"></span> Dashboard</a></li>
+                            <li><a href="#" id="logout-link"><span class="nav-icon"></span> Logout</a></li>
+                        </ul>
+                    </div>
+                    <div class="asset-detail-page">
+                        <button class="btn btn-outline back-button" onclick="window.location.hash='#/asset/${asset.id}'">← Back to Asset</button>
+                        
+                        <div class="withdrawal-form">
+                            <h2>Withdrawal Request for ${asset.name}</h2>
+                            <p style="margin: 1rem 0 2rem;">To proceed with withdrawal, please complete the following steps:</p>
+                            
+                            <div class="form-group">
+                                <label>1. Upload Death Certificate</label>
+                                <div class="upload-area">
+                                    <p style="margin-bottom: 1rem;">Drag & drop or click to upload the death certificate</p>
+                                    <input type="file" id="deathCertificate" accept=".pdf,.jpg,.jpeg,.png" style="display: block; margin: 0 auto;">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>2. Pay Demurrage Fees</label>
+                                <p style="margin: 0.5rem 0;">Outstanding fees: ${formatCurrency(asset.demurrage)}</p>
+                                <select id="paymentMethod" style="margin-top: 0.5rem;">
+                                    <option value="">Select payment method</option>
+                                    <option value="wire">Wire Transfer</option>
+                                    <option value="crypto">Cryptocurrency</option>
+                                    <option value="account">Account Deduction</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>3. Withdrawal Instructions</label>
+                                <textarea id="withdrawalInstructions" rows="4" placeholder="Specify where and how you want the assets delivered"></textarea>
+                            </div>
+                            
+                            <button id="submitWithdrawal" class="btn btn-gold" style="width: 100%; margin-top: 1rem;">
+                                Submit Withdrawal Request
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render function
+        function render(path) {
+            const app = document.getElementById('app');
+            app.innerHTML = routes[path] || routes['/dashboard'];
+            
+            // Add event listeners after render
+            if (path === '/') {
+                document.getElementById('login-btn').addEventListener('click', function() {
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    
+                    if (email && password) {
+                        window.location.hash = '#/dashboard';
+                    } else {
+                        alert('Please enter both email and password');
+                    }
+                });
+            }
+            
+            // Logout buttons
+            const logoutButtons = document.querySelectorAll('#logout-btn, #logout-link');
+            logoutButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    window.location.hash = '#/';
+                });
+            });
+
+            // Submit withdrawal button
+            if (document.getElementById('submitWithdrawal')) {
+                document.getElementById('submitWithdrawal').addEventListener('click', function() {
+                    const fileInput = document.getElementById('deathCertificate');
+                    const paymentMethod = document.getElementById('paymentMethod').value;
+                    
+                    if (!fileInput.files.length) {
+                        alert('Please upload the death certificate');
+                        return;
+                    }
+                    
+                    if (!paymentMethod) {
+                        alert('Please select a payment method');
+                        return;
+                    }
+                    
+                    alert('Withdrawal request submitted successfully. Our team will contact you within 24 hours.');
+                    window.location.hash = `#/asset/${window.location.hash.split('/')[2]}`;
+                });
+            }
+        }
+
+        // Hash change listener
+        window.addEventListener('hashchange', function() {
+            const path = window.location.hash.substring(1) || '/';
+            render(path);
+        });
+
+        // Initial render
+        render(window.location.hash.substring(1) || '/');
+    </script>
+</body>
+</html>
